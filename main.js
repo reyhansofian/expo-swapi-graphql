@@ -22,7 +22,7 @@ import VehicleDetail from './src/Vehicle/VehicleDetail';
 
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: 'http://localhost:59638/',
+    uri: 'http://swapi-graphql-server-5c367817-1.9d3cfa08.cont.dockerapp.io:32768/',
   }),
 });
 
