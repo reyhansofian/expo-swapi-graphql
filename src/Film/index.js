@@ -1,20 +1,19 @@
-import Exponent from 'expo';
 import React from 'react';
 import {
-  ActivityIndicator,
   Dimensions,
-  KeyboardAvoidingView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   View,
   TouchableOpacity,
 } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
 
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+
+import LoadingComponent from '../DataHandler/LoadingComponent';
+import ErrorComponent from '../DataHandler/ErrorComponent';
 
 @graphql(gql`
   query {
@@ -40,15 +39,19 @@ class Film extends React.Component {
   onPress(value) {
     const { navigation } = this.props;
 
-    navigation.navigate('PlanetDetail', { id: value.id, title: value.title });
+    navigation.navigate('FilmDetail', { id: value.id, title: value.title });
   }
 
   render() {
+    if (this.props.data.error) {
+      return (
+        <ErrorComponent error={this.props.data.error} />
+      );
+    }
+
     if (this.props.data.loading) {
       return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" />
-        </View>
+        <LoadingComponent />
       );
     }
 
@@ -56,8 +59,15 @@ class Film extends React.Component {
       <ScrollView>
         {!this.props.data.loading && this.props.data.allFilms.films.map(v => (
           <View key={v.id}>
-            <TouchableOpacity style={styles.messageInput} onPress={() => this.onPress(v)}>
-              <Text>{v.title}</Text>
+            <TouchableOpacity style={styles.rowContainer} onPress={() => this.onPress(v)}>
+              <View style={styles.container}>
+                <View>
+                  <Text>{v.title}</Text>
+                </View>
+                <View>
+                  <Entypo name="chevron-small-right" size={15} />
+                </View>
+              </View>
             </TouchableOpacity>
           </View>
         ))}
@@ -75,21 +85,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  messageInput: {
+  rowContainer: {
     backgroundColor: '#fff',
     width: Dimensions.get('window').width,
     borderWidth: 1,
     borderColor: '#eee',
     padding: 30,
-  },
-  statusBarUnderlay: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    left: 0,
-    height: Exponent.Constants.statusBarHeight,
-    backgroundColor: '#888',
   },
 });
 

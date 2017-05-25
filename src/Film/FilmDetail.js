@@ -2,28 +2,24 @@ import React, { Component, PropTypes } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import {
-  ActivityIndicator,
-  Dimensions,
-  KeyboardAvoidingView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   View,
-  TouchableOpacity,
 } from 'react-native';
+import moment from 'moment';
 
 import LoadingComponent from '../DataHandler/LoadingComponent';
 import ErrorComponent from '../DataHandler/ErrorComponent';
 
 @graphql(gql`
     query($id: ID!) {
-        film(id: $id) {
-          title
-          episodeID
-          openingCrawl
-        }
+      film(id: $id) {
+        title
+        openingCrawl
+        director
+        producers
+        releaseDate
+      }
     }
 `, {
   options: (props) => ({
@@ -54,8 +50,15 @@ class FilmDetail extends Component {
 
     return (
       <View style={styles.container}>
-        <View>
-          <Text style={styles.title}>{film.title}</Text>
+        <Text style={styles.title}>{film.title}</Text>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Released Date:</Text><Text> {moment(film.releaseDate).format('DD MMMM Y')}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Director:</Text><Text> {film.director}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Producers:</Text><Text> {film.producers.join(', ')}</Text>
         </View>
         <View style={styles.openingCrawlContainer}>
           <Text style={styles.openingCrawlText}>{film.openingCrawl}</Text>
@@ -71,6 +74,11 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 19,
+    marginBottom: 10,
+  },
+  bold: {
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   openingCrawlContainer: {
     alignItems: 'center',
@@ -99,11 +107,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#fff',
   },
-  messageInput: {
-    backgroundColor: '#fff',
-    width: Dimensions.get('window').width,
-    borderWidth: 1,
-    borderColor: '#eee',
-    padding: 30,
+  rowContainer: {
+    flexDirection: 'row',
   },
 });

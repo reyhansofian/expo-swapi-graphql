@@ -1,15 +1,10 @@
 import React from 'react';
 import {
-  ActivityIndicator,
-  Dimensions,
-  KeyboardAvoidingView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
   View,
-  TouchableOpacity,
+  Image,
   ListView,
   TouchableHighlight,
 } from 'react-native';
@@ -123,5 +118,11 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 5,
     fontWeight: 'bold',
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // or 'stretch'
+    width: null,
+    height: null,
   },
 });

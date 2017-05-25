@@ -2,9 +2,8 @@ import Expo from 'expo';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
-import { ApolloProvider, graphql } from 'react-apollo';
+import { ApolloProvider } from 'react-apollo';
 import { StackNavigator } from 'react-navigation';
-import { Ionicons } from '@expo/vector-icons';
 
 import App from './src/App';
 import Film from './src/Film';
