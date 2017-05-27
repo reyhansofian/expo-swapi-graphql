@@ -1,17 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import {
-  ActivityIndicator,
   Dimensions,
-  KeyboardAvoidingView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   View,
-  TouchableOpacity,
 } from 'react-native';
 
 import LoadingComponent from '../DataHandler/LoadingComponent';
@@ -61,6 +55,15 @@ class PeopleDetail extends Component {
         <View>
           <Text style={styles.title}>{person.name}</Text>
         </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Birth Year:</Text><Text> {person.birthYear}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Height:</Text><Text> {person.height} cm</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Homeworld:</Text><Text> {person.homeworld.name}</Text>
+        </View>
       </View>
     );
   }
@@ -72,6 +75,11 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 19,
+    marginBottom: 10,
+  },
+  bold: {
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   openingCrawlContainer: {
     alignItems: 'center',
@@ -106,5 +114,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
     padding: 30,
+  },
+  rowContainer: {
+    flexDirection: 'row',
   },
 });
