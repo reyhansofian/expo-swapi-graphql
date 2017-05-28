@@ -1,14 +1,9 @@
-import Exponent from 'expo';
 import React from 'react';
 import {
-  ActivityIndicator,
   Dimensions,
-  KeyboardAvoidingView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   View,
   TouchableOpacity,
 } from 'react-native';
