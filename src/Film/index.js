@@ -12,8 +12,7 @@ import { Entypo } from '@expo/vector-icons';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import LoadingComponent from '../DataHandler/LoadingComponent';
-import ErrorComponent from '../DataHandler/ErrorComponent';
+import DataHandler from '../DataHandler/DataHandler';
 
 @graphql(gql`
   query {
@@ -25,6 +24,7 @@ import ErrorComponent from '../DataHandler/ErrorComponent';
     }
   }
 `)
+@DataHandler
 class Film extends React.Component {
   static navigationOptions = {
       title: 'Film',
@@ -43,18 +43,6 @@ class Film extends React.Component {
   }
 
   render() {
-    if (this.props.data.error) {
-      return (
-        <ErrorComponent error={this.props.data.error} />
-      );
-    }
-
-    if (this.props.data.loading) {
-      return (
-        <LoadingComponent />
-      );
-    }
-
     return (
       <ScrollView>
         {!this.props.data.loading && this.props.data.allFilms.films.map(v => (

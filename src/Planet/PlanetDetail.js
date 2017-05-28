@@ -1,29 +1,36 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import {
-  ActivityIndicator,
   Dimensions,
-  KeyboardAvoidingView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   View,
-  TouchableOpacity,
+  ListView,
 } from 'react-native';
 
-import LoadingComponent from '../DataHandler/LoadingComponent';
-import ErrorComponent from '../DataHandler/ErrorComponent';
+import DataHandler from '../DataHandler/DataHandler';
 
 @graphql(gql`
     query($id: ID!) {
       planet(id: $id) {
         name
         diameter
-        population
+        rotationPeriod
+        orbitalPeriod
         gravity
+        population
+        climates
+        terrains
+        surfaceWater
+        residentConnection {
+          edges {
+            node {
+              id
+              name
+            }
+          }
+        }
       }
     }
 `, {
@@ -33,30 +40,67 @@ import ErrorComponent from '../DataHandler/ErrorComponent';
     },
   }),
 })
+@DataHandler
 class PlanetDetail extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.name,
   });
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      resident: [],
+    };
+
+    this.renderResident = this.renderResident.bind(this);
+  }
+
+  renderResident = (resident) => (
+    <View>
+      <Text>• {resident}</Text>
+    </View>
+  );
+
   render() {
-    if (this.props.data.error) {
-      return (
-        <ErrorComponent error={this.props.data.error} />
-      );
-    }
-
-    if (this.props.data.loading) {
-      return (
-        <LoadingComponent />
-      );
-    }
-
     const { planet } = this.props.data;
+
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const residents = ds.cloneWithRows(planet.residentConnection.edges.map(res => res.node.name));
 
     return (
       <View style={styles.container}>
         <View>
           <Text style={styles.title}>{planet.name}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Diameter:</Text><Text> {planet.diameter} km</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Orbital Period:</Text><Text> {planet.orbitalPeriod} years</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Rotation Period:</Text><Text> {planet.rotationPeriod} years</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Gravitiy:</Text><Text> {planet.gravity}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Population:</Text><Text> {planet.population}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Climates:</Text><Text> {planet.climates.join(', ')}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Terrains:</Text><Text> {planet.terrains.join(', ')}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Residents:</Text>
+          <ListView
+            dataSource={residents}
+            renderRow={this.renderResident}
+            enableEmptySections
+          />
         </View>
       </View>
     );
@@ -69,6 +113,11 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 19,
+    marginBottom: 10,
+  },
+  bold: {
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   openingCrawlContainer: {
     alignItems: 'center',
@@ -103,5 +152,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
     padding: 30,
+  },
+  rowContainer: {
+    flexDirection: 'row',
   },
 });

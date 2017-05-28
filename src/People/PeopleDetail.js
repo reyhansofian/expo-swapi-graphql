@@ -8,8 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import LoadingComponent from '../DataHandler/LoadingComponent';
-import ErrorComponent from '../DataHandler/ErrorComponent';
+import DataHandler from '../DataHandler/DataHandler';
 
 @graphql(gql`
     query($id: ID!) {
@@ -30,24 +29,13 @@ import ErrorComponent from '../DataHandler/ErrorComponent';
     },
   }),
 })
+@DataHandler
 class PeopleDetail extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.name,
   });
 
   render() {
-    if (this.props.data.error) {
-      return (
-        <ErrorComponent error={this.props.data.error} />
-      );
-    }
-
-    if (this.props.data.loading) {
-      return (
-        <LoadingComponent />
-      );
-    }
-
     const { person } = this.props.data;
 
     return (
