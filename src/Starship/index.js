@@ -13,9 +13,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
-import { ApolloProvider, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Entypo } from '@expo/vector-icons';
+
+import DataHandler from '../DataHandler/DataHandler';
 
 @graphql(gql`
   query {
@@ -27,6 +29,7 @@ import gql from 'graphql-tag';
     }
   }
 `)
+@DataHandler
 class Starship extends React.Component {
   static navigationOptions = {
       title: 'Starship',
@@ -45,20 +48,19 @@ class Starship extends React.Component {
   }
 
   render() {
-    if (this.props.data.loading) {
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" />
-        </View>
-      );
-    }
-
     return (
       <ScrollView>
         {!this.props.data.loading && this.props.data.allStarships.starships.map(v => (
           <View key={v.id}>
-            <TouchableOpacity style={styles.messageInput} onPress={() => this.onPress(v)}>
-              <Text>{v.name}</Text>
+            <TouchableOpacity style={styles.rowContainer} onPress={() => this.onPress(v)}>
+              <View style={styles.container}>
+                <View>
+                  <Text>{v.name}</Text>
+                </View>
+                <View>
+                  <Entypo name="chevron-small-right" size={15} />
+                </View>
+              </View>
             </TouchableOpacity>
           </View>
         ))}
@@ -68,29 +70,18 @@ class Starship extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  messageInput: {
+  rowContainer: {
     backgroundColor: '#fff',
     width: Dimensions.get('window').width,
     borderWidth: 1,
     borderColor: '#eee',
     padding: 30,
-  },
-  statusBarUnderlay: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    left: 0,
-    height: Exponent.Constants.statusBarHeight,
-    backgroundColor: '#888',
   },
 });
 

@@ -1,7 +1,6 @@
 import Exponent from 'expo';
 import React from 'react';
 import {
-  ActivityIndicator,
   Dimensions,
   ScrollView,
   StyleSheet,

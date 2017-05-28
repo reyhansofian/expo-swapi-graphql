@@ -2,20 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import {
-  ActivityIndicator,
   Dimensions,
-  KeyboardAvoidingView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   View,
-  TouchableOpacity,
 } from 'react-native';
 
-import LoadingComponent from '../DataHandler/LoadingComponent';
-import ErrorComponent from '../DataHandler/ErrorComponent';
+import DataHandler from '../DataHandler/DataHandler';
 
 @graphql(gql`
     query($id: ID!) {
@@ -41,30 +34,52 @@ import ErrorComponent from '../DataHandler/ErrorComponent';
     },
   }),
 })
+@DataHandler
 class StarshipDetail extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.name,
   });
 
   render() {
-    if (this.props.data.error) {
-      return (
-        <ErrorComponent error={this.props.data.error} />
-      );
-    }
-
-    if (this.props.data.loading) {
-      return (
-        <LoadingComponent />
-      );
-    }
-
-    const { starship } = this.props.data;
+   const { starship } = this.props.data;
 
     return (
       <View style={styles.container}>
         <View>
           <Text style={styles.title}>{starship.name}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Class:</Text><Text> {starship.starshipClass}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Model:</Text><Text> {starship.model}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Manufacturers:</Text><Text> {starship.manufacturers.join(', ')}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Cost:</Text><Text> {starship.costInCredits}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Length:</Text><Text> {starship.length} m</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Crew:</Text><Text> {starship.crew}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Passengers:</Text><Text> {starship.passengers}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Max Atmosphering Speed:</Text><Text> {starship.maxAtmospheringSpeed}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Hyperdrive Rating:</Text><Text> {starship.hyperdriveRating}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Cargo Capacity:</Text><Text> {starship.cargoCapacity}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Consumables:</Text><Text> {starship.consumables}</Text>
         </View>
       </View>
     );
@@ -77,28 +92,11 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 19,
+    marginBottom: 10,
   },
-  openingCrawlContainer: {
-    alignItems: 'center',
-    borderColor: 'grey',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginVertical: 10,
-    paddingVertical: 10,
-  },
-  openingCrawlText: {
-    textAlign: 'center',
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  errorContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'red',
+  bold: {
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   container: {
     flex: 1,
@@ -111,5 +109,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
     padding: 30,
+  },
+  rowContainer: {
+    flexDirection: 'row',
   },
 });
