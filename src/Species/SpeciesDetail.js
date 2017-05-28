@@ -2,20 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import {
-  ActivityIndicator,
   Dimensions,
-  KeyboardAvoidingView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   View,
-  TouchableOpacity,
 } from 'react-native';
 
-import LoadingComponent from '../DataHandler/LoadingComponent';
-import ErrorComponent from '../DataHandler/ErrorComponent';
+import DataHandler from '../DataHandler/DataHandler';
 
 @graphql(gql`
     query($id: ID!) {
@@ -34,30 +27,31 @@ import ErrorComponent from '../DataHandler/ErrorComponent';
     },
   }),
 })
+@DataHandler
 class SpeciesDetail extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.name,
   });
 
   render() {
-    if (this.props.data.error) {
-      return (
-        <ErrorComponent error={this.props.data.error} />
-      );
-    }
-
-    if (this.props.data.loading) {
-      return (
-        <LoadingComponent />
-      );
-    }
-
     const { species } = this.props.data;
 
     return (
       <View style={styles.container}>
         <View>
           <Text style={styles.title}>{species.name}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Classification:</Text><Text> {species.classification}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Language:</Text><Text> {species.language}</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Average Height:</Text><Text> {species.averageHeight} cm</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.bold}>Average Lifespan:</Text><Text> {species.averageLifespan || 0} years</Text>
         </View>
       </View>
     );
@@ -70,28 +64,11 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 19,
+    marginBottom: 10,
   },
-  openingCrawlContainer: {
-    alignItems: 'center',
-    borderColor: 'grey',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginVertical: 10,
-    paddingVertical: 10,
-  },
-  openingCrawlText: {
-    textAlign: 'center',
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  errorContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'red',
+  bold: {
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   container: {
     flex: 1,
@@ -104,5 +81,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
     padding: 30,
+  },
+  rowContainer: {
+    flexDirection: 'row',
   },
 });
