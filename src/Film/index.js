@@ -9,8 +9,7 @@ import {
 } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { gql, graphql } from 'react-apollo';
 
 import DataHandler from '../DataHandler/DataHandler';
 

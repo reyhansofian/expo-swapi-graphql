@@ -6,9 +6,7 @@
   "private": true,
   "main": "main.js",
   "dependencies": {
-    "apollo-client": "^1.2.2",
     "expo": "17.0.0",
-    "graphql-tag": "^2.1.0",
     "moment": "^2.18.1",
     "react": "16.0.0-alpha.6",
     "react-apollo": "^1.2.0",

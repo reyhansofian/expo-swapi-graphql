@@ -8,8 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { gql, graphql } from 'react-apollo';
 import { Entypo } from '@expo/vector-icons';
 
 import DataHandler from '../DataHandler/DataHandler';
